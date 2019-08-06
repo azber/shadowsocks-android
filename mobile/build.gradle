@@ -68,6 +68,8 @@ dependencies {
     implementation 'com.twofortyfouram:android-plugin-api-for-locale:1.0.4'
     implementation 'net.glxn.qrgen:android:2.0'
     implementation 'xyz.belvi.mobilevision:barcodescanner:2.0.3'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.google.android.material:material:1.0.0'
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test:runner:$androidTestVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidEspressoVersion"

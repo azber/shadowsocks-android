@@ -123,6 +123,7 @@ class MainActivity : AppCompatActivity(), ShadowsocksConnection.Callback, OnPref
 
     private val handler = Handler()
     private val connection = ShadowsocksConnection(handler, true)
+
     override fun onServiceConnected(service: IShadowsocksService) = changeState(try {
         BaseService.State.values()[service.state]
     } catch (_: DeadObjectException) {

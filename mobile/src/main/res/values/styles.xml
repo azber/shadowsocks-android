@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Theme.Shadowsocks.Immersive.Navigation">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="Theme.Shadowsocks.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Shadowsocks.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Shadowsocks.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
