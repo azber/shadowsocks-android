@@ -44,7 +44,7 @@ import java.net.URLConnection
 /**
  * Based on: https://android.googlesource.com/platform/frameworks/base/+/b19a838/services/core/java/com/android/server/connectivity/NetworkMonitor.java#1071
  */
-class HttpsTest : ViewModel() {
+class  HttpsTest : ViewModel() {
     sealed class Status {
         protected abstract val status: CharSequence
         open fun retrieve(setStatus: (CharSequence) -> Unit, errorCallback: (String) -> Unit) = setStatus(status)

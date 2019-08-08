@@ -27,7 +27,7 @@ import androidx.appcompat.app.AppCompatDelegate
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        Core.init(this, MainActivity::class)
+        Core.init(this, VpnActivity::class)
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
     }
 

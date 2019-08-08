@@ -25,64 +25,26 @@ import com.github.shadowsocks.utils.Key
 
 import kotlinx.android.synthetic.main.activity_vpn.*
 
-class VpnActivity : AppCompatActivity(), ShadowsocksConnection.Callback, OnPreferenceDataStoreChangeListener {
+class VpnActivity : AppCompatActivity() {
 
     var state = BaseService.State.Idle
+
+    private lateinit var vpnConnection: VPNConnection
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vpn)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+        vpnConnection = VPNConnection(this)
 
-        changeState(BaseService.State.Idle) // reset everything to init state
-        connection.connect(this, this)
+        // 我随便填了一个服务器地址
+        val sharedStr = "ss://Y2hhY2hhMjA6N2Y2ZmU1QHYyLnNoZG93c3MueHl6OjE0NDg0"
+        vpnConnection.addProfile(sharedStr)
 
+        // 按钮点击
         val mBtnVpnOptions = findViewById<Button>(R.id.btn_vpn_options)
         mBtnVpnOptions.setOnClickListener { toggle() }
-
-        val sharedStr = "ss://Y2hhY2hhMjA6N2Y2ZmU1QHYyLnNoZG93c3MueHl6OjE0NDg0"
-
-        val feature = Core.currentProfile?.first
-        val profiles = Profile.findAllUrls(sharedStr, feature).toList()
-
-        if (profiles.isNotEmpty()) {
-            profiles.forEach {
-                ProfileManager.createProfile(it)
-                Core.switchProfile(it.id)
-            }
-        }
-    }
-
-    override fun onPreferenceDataStoreChanged(store: PreferenceDataStore, key: String) {
-        when (key) {
-            Key.serviceMode -> handler.post {
-                connection.disconnect(this)
-                connection.connect(this, this)
-            }
-        }
-    }
-
-    private val handler = Handler()
-    private val connection = ShadowsocksConnection(handler, true)
-
-    override fun stateChanged(state: BaseService.State, profileName: String?, msg: String?) =
-            changeState(state, msg, true)
-
-    override fun onServiceConnected(service: IShadowsocksService) = changeState(try {
-        BaseService.State.values()[service.state]
-    } catch (_: DeadObjectException) {
-        BaseService.State.Idle
-    })
-
-    override fun onServiceDisconnected() = changeState(BaseService.State.Idle)
-    override fun onBinderDied() {
-        connection.disconnect(this)
-        connection.connect(this, this)
     }
 
 
@@ -93,42 +55,7 @@ class VpnActivity : AppCompatActivity(), ShadowsocksConnection.Callback, OnPrefe
         var stateListener: ((BaseService.State) -> Unit)? = null
     }
 
-    private fun changeState(state: BaseService.State, msg: String? = null, animate: Boolean = false) {
-        this.state = state
-        ProfilesFragment.instance?.profilesAdapter?.notifyDataSetChanged()  // refresh button enabled state
-        VpnActivity.stateListener?.invoke(state)
-    }
-
-
-    override fun onStart() {
-        super.onStart()
-        connection.bandwidthTimeout = 500
-    }
-
-    override fun onStop() {
-        connection.bandwidthTimeout = 0
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        DataStore.publicStore.unregisterChangeListener(this)
-        connection.disconnect(this)
-        BackupManager(this).dataChanged()
-        handler.removeCallbacksAndMessages(null)
-    }
-
-    private fun toggle() = when {
-        state.canStop -> {
-            Core.stopService()
-        }
-        DataStore.serviceMode == Key.modeVpn -> {
-            val intent = VpnService.prepare(this)
-            if (intent != null) startActivityForResult(intent, VpnActivity.REQUEST_CONNECT)
-            else onActivityResult(VpnActivity.REQUEST_CONNECT, Activity.RESULT_OK, null)
-        }
-        else -> Core.startService()
-    }
+    private fun toggle() = vpnConnection.toggle(VpnActivity.REQUEST_CONNECT)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when {
@@ -140,7 +67,5 @@ class VpnActivity : AppCompatActivity(), ShadowsocksConnection.Callback, OnPrefe
         }
     }
 
-    override fun trafficUpdated(profileId: Long, stats: TrafficStats) {}
 
-    override fun trafficPersisted(profileId: Long) {}
 }

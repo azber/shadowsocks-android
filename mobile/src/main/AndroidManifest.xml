@@ -18,70 +18,11 @@
         tools:ignore="MissingTvBanner">
         <activity
             android:name=".VpnActivity"
-            android:label="@string/title_activity_vpn"
-            android:theme="@style/Theme.Shadowsocks.Immersive.Navigation">
+            android:label="@string/title_activity_vpn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:theme="@style/Theme.Shadowsocks.Immersive.Navigation">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
-        </activity>
-        <activity
-            android:name=".ProfileConfigActivity"
-            android:excludeFromRecents="true"
-            android:label="@string/profile_config"
-            android:theme="@style/Theme.Shadowsocks.Immersive" />
-        <activity
-            android:name=".AppManager"
-            android:excludeFromRecents="true"
-            android:label="@string/proxied_apps"
-            android:parentActivityName=".ProfileConfigActivity"
-            android:theme="@style/Theme.Shadowsocks.Immersive" />
-        <activity
-            android:name=".UdpFallbackProfileActivity"
-            android:excludeFromRecents="true"
-            android:label="@string/udp_fallback"
-            android:theme="@style/Theme.Shadowsocks.Immersive" />
-        <activity
-            android:name=".ScannerActivity"
-            android:excludeFromRecents="true"
-            android:label="@string/add_profile_methods_scan_qr_code"
-            android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".tasker.ConfigActivity"
-            android:theme="@style/Theme.Shadowsocks.Immersive">
-            <intent-filter>
-                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".QuickToggleShortcut"
-            android:excludeFromRecents="true"
-            android:label="@string/quick_toggle"
-            android:process=":bg"
-            android:taskAffinity=""
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
-            <intent-filter>
-                <action android:name="android.intent.action.CREATE_SHORTCUT" />
             </intent-filter>
         </activity>
 

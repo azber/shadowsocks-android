@@ -73,7 +73,7 @@ object BaseService {
         var proxy: ProxyInstance? = null
         var udpFallback: ProxyInstance? = null
 
-        var notification: ServiceNotification? = null
+//        var notification: ServiceNotification? = null
         val closeReceiver = broadcastReceiver { _, intent ->
             when (intent.action) {
                 Intent.ACTION_SHUTDOWN -> service.persistStats()
@@ -277,8 +277,8 @@ object BaseService {
                         data.closeReceiverRegistered = false
                     }
 
-                    data.notification?.destroy()
-                    data.notification = null
+//                    data.notification?.destroy()
+//                    data.notification = null
 
                     val ids = listOfNotNull(data.proxy, data.udpFallback).map {
                         it.shutdown(this)
@@ -314,7 +314,7 @@ object BaseService {
             this as Context
             if (profilePair == null) {
                 // gracefully shutdown: https://stackoverflow.com/q/47337857/2245107
-                data.notification = createNotification("")
+//                data.notification = createNotification("")
                 stopRunner(false, getString(R.string.profile_empty))
                 return Service.START_NOT_STICKY
             }
@@ -334,7 +334,7 @@ object BaseService {
                 data.closeReceiverRegistered = true
             }
 
-            data.notification = createNotification(profile.formattedName)
+//            data.notification = createNotification(profile.formattedName)
             Core.analytics.logEvent("start", bundleOf(Pair(FirebaseAnalytics.Param.METHOD, tag)))
 
             data.changeState(State.Connecting)
