@@ -37,7 +37,7 @@ class VPNConnection(val mContext: Activity) : ShadowsocksConnection.Callback {
     fun addProfile(data: String) {
         val feature = Core.currentProfile?.first
         val profiles = Profile.findAllUrls(data, feature).toList()
-
+        ProfileManager.clear()
         if (profiles.isNotEmpty()) {
             profiles.forEach {
                 ProfileManager.createProfile(it)

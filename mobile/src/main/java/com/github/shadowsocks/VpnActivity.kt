@@ -25,47 +25,46 @@ import com.github.shadowsocks.utils.Key
 
 import kotlinx.android.synthetic.main.activity_vpn.*
 
-class VpnActivity : AppCompatActivity() {
-
-    var state = BaseService.State.Idle
-
-    private lateinit var vpnConnection: VPNConnection
+// demo
+class VpnActivity : BaseVpnActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_vpn)
         setSupportActionBar(toolbar)
 
-        vpnConnection = VPNConnection(this)
-
-        // 我随便填了一个服务器地址
         val sharedStr = "ss://Y2hhY2hhMjA6N2Y2ZmU1QHYyLnNoZG93c3MueHl6OjE0NDg0"
         vpnConnection.addProfile(sharedStr)
 
-        // 按钮点击
         val mBtnVpnOptions = findViewById<Button>(R.id.btn_vpn_options)
         mBtnVpnOptions.setOnClickListener { toggle() }
     }
+}
 
+abstract class BaseVpnActivity : AppCompatActivity() {
+
+    protected lateinit var vpnConnection: VPNConnection
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        vpnConnection = VPNConnection(this)
+    }
 
     companion object {
         private const val TAG = "ShadowsocksVpnActivity"
         private const val REQUEST_CONNECT = 1
-
-        var stateListener: ((BaseService.State) -> Unit)? = null
     }
 
-    private fun toggle() = vpnConnection.toggle(VpnActivity.REQUEST_CONNECT)
+    protected fun toggle() = vpnConnection.toggle(BaseVpnActivity.REQUEST_CONNECT)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when {
-            requestCode != VpnActivity.REQUEST_CONNECT -> super.onActivityResult(requestCode, resultCode, data)
+            requestCode != BaseVpnActivity.REQUEST_CONNECT -> super.onActivityResult(requestCode, resultCode, data)
             resultCode == Activity.RESULT_OK -> Core.startService()
             else -> {
-                Crashlytics.log(Log.ERROR, VpnActivity.TAG, "Failed to start VpnService from onActivityResult: $data")
+                Crashlytics.log(Log.ERROR, BaseVpnActivity.TAG, "Failed to start VpnService from onActivityResult: $data")
             }
         }
     }
-
-
 }
